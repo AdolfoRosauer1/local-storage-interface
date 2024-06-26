@@ -1,18 +1,24 @@
 <template>
-    <div class="file-list">
-      <h2>Files and Directories</h2>
-      <ul>
-        <li v-for="item in items" :key="item.name">
-          {{ item.name }}
-          <button @click="downloadItem(item)" v-if="!item.isDirectory">Download</button>
-          <button @click="openDirectory(item)" v-if="item.isDirectory">Open</button>
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Files and Directories</h2>
+      <ul class="space-y-2">
+        <li v-for="item in items" :key="item.name" class="flex items-center justify-between bg-gray-50 p-3 rounded">
+          <span class="text-gray-700">{{ item.name }}</span>
+          <div>
+            <button @click="downloadItem(item)" v-if="!item.isDirectory" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2">
+              Download
+            </button>
+            <button @click="openDirectory(item)" v-if="item.isDirectory" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+              Open
+            </button>
+          </div>
         </li>
       </ul>
     </div>
   </template>
   
   <script>
-  import axios from 'axios'
+  import api from '@/services/api'
   
   export default {
     name: 'FileList',
@@ -24,14 +30,13 @@
     methods: {
       async fetchItems(path = '') {
         try {
-          const response = await axios.get(`http://localhost:8080/list?path=${path}`)
-          this.items = response.data
+          this.items = await api.listItems(path)
         } catch (error) {
           console.error('Error fetching items:', error)
         }
       },
       downloadItem(item) {
-        window.open(`http://localhost:8080/download?file=${item.path}`, '_blank')
+        window.open(api.getDownloadUrl(item.path), '_blank')
       },
       openDirectory(item) {
         this.fetchItems(item.path)
@@ -42,19 +47,3 @@
     }
   }
   </script>
-  
-  <style scoped>
-  .file-list {
-    margin-top: 20px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    margin-bottom: 10px;
-  }
-  button {
-    margin-left: 10px;
-  }
-  </style>
