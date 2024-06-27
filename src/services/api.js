@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://localhost:8888/api';
 
 export default {
-  async listItems(path = '') {
+  async listItems() {
     try {
-      const response = await axios.get(`${API_URL}/list`, { params: { path } });
+      const response = await axios.get(`${API_URL}/files`, );
       return response.data;
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -18,7 +18,7 @@ export default {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${API_URL}/upload`, formData, {
+      const response = await axios.post(`${API_URL}/files`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -30,7 +30,7 @@ export default {
     }
   },
 
-  getDownloadUrl(filePath) {
-    return `${API_URL}/download?file=${encodeURIComponent(filePath)}`;
+  getDownloadUrl(id) {
+    return `${API_URL}/files/${id}`;
   }
 };

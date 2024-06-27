@@ -36,7 +36,7 @@
         }
       },
       downloadItem(item) {
-        window.open(api.getDownloadUrl(item.path), '_blank')
+        window.open(api.getDownloadUrl(item.id), '_blank')
       },
       openDirectory(item) {
         this.fetchItems(item.path)
