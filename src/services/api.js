@@ -30,6 +30,16 @@ export default {
     }
   },
 
+  async deleteFile(id) {
+    try {
+      const response = await axios.delete(`${API_URL}/files/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      throw error;
+    }
+  },
+
   getDownloadUrl(id) {
     return `${API_URL}/files/${id}`;
   }
